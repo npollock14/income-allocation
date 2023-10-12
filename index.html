@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contribution Calculator</title>
+    <style>
+        /* Reset some default browser styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #E0E0E0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="number"], input[type="range"], input[type="checkbox"] {
+            margin: 10px 0;
+            padding: 8px 12px;
+            background: #333;
+            border: none;
+            border-radius: 5px;
+            color: #E0E0E0;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        table, th, td {
+            border: 1px solid #333;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #333;
+            color: #E0E0E0;
+            font-weight: 600;
+        }
+
+        .slider-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .slider-container label, .slider-container input[type="range"], .slider-container span, .slider-container input[type="checkbox"] {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .slider-container input[type="checkbox"] {
+            transform: scale(1.2);
+            margin: 0;
+        }
+
+        .input-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .input-section > div {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        /* A small hover effect for interactivity */
+        input[type="range"]:hover, input[type="range"]:focus {
+            background: #555;
+        }
+
+        input[type="text"], input[type="number"] {
+        max-width: 200px;  /* Limit the width of the input boxes */
+    }
+
+    .slider-container {
+        display: flex;
+        justify-content: space-between;  /* Distribute space between slider elements */
+        align-items: center;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 10px;
+    }
+
+    .slider-container label {
+        flex: 1.5;  /* Give more space for the label */
+    }
+
+    .slider-container input[type="range"] {
+        flex: 2;  /* Allow the slider to take up more space */
+    }
+
+    .slider-container span {
+        flex: 0.5;  /* Space for the percentage value */
+        text-align: right;  /* Align the text to the right */
+        margin-right: 20px;  /* Add some margin to separate from the checkbox */
+    }
+
+    .slider-container input[type="checkbox"] {
+        flex: 0.5;  /* Space for the checkbox */
+        transform: scale(1.2);
+        margin-left: 10px;  /* Add some margin to separate from the percentage value */
+    }
+
+    .input-section {
+        display: flex;
+        justify-content: start;  /* Align input boxes to the start */
+        gap: 20px;  /* Add some gap between the input boxes */
+        margin-bottom: 40px;
+    }
+
+    .category-controls {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;   /* space between the buttons */
+    margin-bottom: 20px;   /* space below the controls section */
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: #232323;   /* slightly lighter than the body background for subtle contrast */
+}
+
+.category-controls button {
+    padding: 10px 20px;
+    background-color: #444;
+    border: none;
+    border-radius: 5px;
+    color: #E0E0E0;
+    cursor: pointer;
+    transition: background-color 0.2s;   /* smooth transition for hover effect */
+}
+
+.category-controls button:hover {
+    background-color: #555;  /* slightly lighter on hover */
+}
+
+.category-controls button:active {
+    background-color: #333;  /* darken the button when pressed */
+}
+
+body {
+    max-width: 1000px;  /* limit the width of the page */
+    margin: 0 auto;  /* center the page */
+
+}
+
+
+    </style>
+</head>
+
+
+<body>
+
+<h2>Contribution Calculator</h2>
+
+<div class="input-section">
+    <label for="income">Income: </label>
+    <input type="number" id="income" value="50000">
+    <label for="taxEstimation">Tax Estimation (%): </label>
+    <input type="number" id="taxEstimation" value="25">
+</div>
+
+<div class="slider-container" id="401k-container">
+    <label for="401k">401k: </label>
+    <input type="range" id="401k" value="25" min="1" max="100">
+    <span id="401k-value">25</span>%
+    <input type="checkbox" id="401k-lock"> Lock
+</div>
+
+<div class="slider-container" id="stocks-container">
+    <label for="stocks">Stocks: </label>
+    <input type="range" id="stocks" value="25" min="1" max="100">
+    <span id="stocks-value">25</span>%
+    <input type="checkbox" id="stocks-lock"> Lock
+</div>
+
+<div class="slider-container" id="checking-container">
+    <label for="checking">Checking: </label>
+    <input type="range" id="checking" value="25" min="1" max="100">
+    <span id="checking-value">25</span>%
+    <input type="checkbox" id="checking-lock"> Lock
+</div>
+
+<div class="slider-container" id="hy-savings-container">
+    <label for="hy-savings">HY Savings: </label>
+    <input type="range" id="hy-savings" value="25" min="1" max="100">
+    <span id="hy-savings-value">25</span>%
+    <input type="checkbox" id="hy-savings-lock"> Lock
+</div>
+
+<div class="category-controls">
+    <button onclick="addCategory()">Add Category</button>
+    <button onclick="deleteCategory()">Delete Last Category</button>
+</div>
+
+
+
+
+<script>
+  let grossIncome = 50_000;
+let taxEstimation = 0.25;
+let taxes = grossIncome * taxEstimation;
+let netIncome = grossIncome - taxes;
+
+// Create an object to hold the exact percentages
+let exactPercentages = {
+    '401k': 25.0,
+    'stocks': 25.0,
+    'checking': 25.0,
+    'hy-savings': 25.0
+};
+
+function updateSliderValue(sliderId, valueId) {
+    const slider = document.getElementById(sliderId);
+    const output = document.getElementById(valueId);
+    output.innerHTML = slider.value;
+    slider.oninput = function() {
+        output.innerHTML = this.value;
+        exactPercentages[sliderId] = parseFloat(this.value);
+        rebalanceSliders(sliderId);
+        updateTable();
+    }
+}
+
+function rebalanceSliders(changedSliderId) {
+    const sliders = Object.keys(exactPercentages);
+    let total = 0;
+    sliders.forEach(id => {
+        total += exactPercentages[id];
+    });
+
+    if (total !== 100) {
+        let excess = total - 100;
+        let unlockedSliders = sliders.filter(id => !document.getElementById(id + '-lock').checked);
+        let totalValueExcludingChanged = total - exactPercentages[changedSliderId];
+        let adjustmentTotal = 0;
+
+        unlockedSliders.forEach(id => {
+            if (id !== changedSliderId) {
+                let adjustment = (exactPercentages[id] / totalValueExcludingChanged) * excess;
+                adjustmentTotal += adjustment;
+                exactPercentages[id] -= adjustment;
+                document.getElementById(id).value = Math.round(exactPercentages[id]);
+                document.getElementById(id + '-value').innerText = document.getElementById(id).value;
+            }
+        });
+
+        // Adjust the changed slider by the remaining amount
+        exactPercentages[changedSliderId] -= (excess - adjustmentTotal);
+        document.getElementById(changedSliderId).value = Math.round(exactPercentages[changedSliderId]);
+        document.getElementById(changedSliderId + '-value').innerText = document.getElementById(changedSliderId).value;
+    }
+}
+
+// rebalance all sliders proportionally, including locked sliders
+function rebalanceSliders() {
+    const sliders = Object.keys(exactPercentages);
+    let total = 0;
+    sliders.forEach(id => {
+        total += exactPercentages[id];
+    });
+
+    if (total !== 100) {
+        let excess = total - 100;
+        let totalValueExcludingChanged = total;
+        let adjustmentTotal = 0;
+
+        sliders.forEach(id => {
+            let adjustment = (exactPercentages[id] / totalValueExcludingChanged) * excess;
+            adjustmentTotal += adjustment;
+            exactPercentages[id] -= adjustment;
+            document.getElementById(id).value = Math.round(exactPercentages[id]);
+            document.getElementById(id + '-value').innerText = document.getElementById(id).value;
+        });
+    }
+}
+
+// Initialize all sliders
+Object.keys(exactPercentages).forEach(key => {
+    updateSliderValue(key, `${key}-value`);
+});
+
+
+updateSliderValue('401k', '401k-value');
+updateSliderValue('stocks', 'stocks-value');
+updateSliderValue('checking', 'checking-value');
+updateSliderValue('hy-savings', 'hy-savings-value');
+</script>
+
+<script>
+function addCategory() {
+    const categoryName = prompt("Enter the category name:");
+    if (categoryName && categoryName.trim() !== "") {
+        const safeName = categoryName.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+        
+        if (document.getElementById(safeName)) {
+            alert("Category already exists!");
+            return;
+        }
+
+        exactPercentages[safeName] = 0;
+
+        const container = document.createElement("div");
+        container.className = "slider-container";
+        container.id = `${safeName}-container`;
+        
+        container.innerHTML = `
+            <label for="${safeName}">${categoryName}:</label>
+            <input type="range" id="${safeName}" value="0" min="1" max="100">
+            <span id="${safeName}-value">0</span>%
+            <input type="checkbox" id="${safeName}-lock"> Lock
+        `;
+
+        // Insert the new slider container before the category-controls section
+        document.body.insertBefore(container, document.querySelector(".category-controls"));
+        
+        updateSliderValue(safeName, `${safeName}-value`);
+        rebalanceSliders();
+        updateTable();
+    }
+}
+
+function deleteCategory() {
+    const sliders = Object.keys(exactPercentages);
+    if (sliders.length <= 1) {
+        alert("You cannot delete all categories!");
+        return;
+    }
+    
+    const lastSlider = sliders[sliders.length - 1];
+    delete exactPercentages[lastSlider];
+
+    const container = document.getElementById(`${lastSlider}-container`);
+    container.parentNode.removeChild(container);
+
+    rebalanceSliders();
+
+    updateTable();
+}
+
+</script>
+
+<table>
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Contribution ($)</th>
+            <th>Percentage of Income (%)</th>
+            <th>Per Paycheck ($)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- The rows with data populated by JavaScript will be inserted here -->
+    </tbody>
+</table>
+
+<script>
+ document.addEventListener('DOMContentLoaded', function() {
+    const incomeInput = document.getElementById('income');
+    const taxEstimationInput = document.getElementById('taxEstimation');
+
+    incomeInput.addEventListener('input', updateTable);
+    taxEstimationInput.addEventListener('input', updateTable);
+
+    updateTable();
+});
+
+function updateTable() {
+    const income = parseFloat(document.getElementById('income').value);
+    const taxEstimation = parseFloat(document.getElementById('taxEstimation').value) / 100;
+    const taxes = income * taxEstimation;
+    const netIncome = income - taxes;
+
+    const sliders = Object.keys(exactPercentages);
+    const tbody = document.querySelector('tbody');
+    tbody.innerHTML = '';
+
+    let totalContribution = 0;
+    let totalPercentage = 0;
+    let totalPerPaycheck = 0;
+
+    sliders.forEach(id => {
+        const percentage = exactPercentages[id];
+        const contribution = netIncome * (percentage / 100);
+        const perPaycheck = contribution / 26;
+
+        totalContribution += contribution;
+        totalPercentage += percentage;
+        totalPerPaycheck += perPaycheck;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${id.charAt(0).toUpperCase() + id.slice(1)}</td>
+            <td>$${contribution.toFixed(2)}</td>
+            <td>${percentage.toFixed(2)}%</td>
+            <td>$${perPaycheck.toFixed(2)}</td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    const totalsRow = document.createElement('tr');
+    totalsRow.innerHTML = `
+        <td><strong>Total</strong></td>
+        <td><strong>$${totalContribution.toFixed(2)}</strong></td>
+        <td><strong>${totalPercentage.toFixed(2)}%</strong></td>
+        <td><strong>$${totalPerPaycheck.toFixed(2)}</strong></td>
+    `;
+    tbody.appendChild(totalsRow);
+}
+
+
+</script>
+
+</body>
+
+</html>
