@@ -282,7 +282,8 @@ function rebalanceSliders(changedSliderId) {
 }
 
 // rebalance all sliders proportionally, including locked sliders
-function rebalanceSliders() {
+function rebalanceSlidersNoLock() {
+    console.log("rebalancing sliders");
     const sliders = Object.keys(exactPercentages);
     let total = 0;
     sliders.forEach(id => {
@@ -344,7 +345,7 @@ function addCategory() {
         document.body.insertBefore(container, document.querySelector(".category-controls"));
         
         updateSliderValue(safeName, `${safeName}-value`);
-        rebalanceSliders();
+        rebalanceSlidersNoLock();
         updateTable();
     }
 }
@@ -362,7 +363,7 @@ function deleteCategory() {
     const container = document.getElementById(`${lastSlider}-container`);
     container.parentNode.removeChild(container);
 
-    rebalanceSliders();
+    rebalanceSlidersNoLock();
 
     updateTable();
 }
