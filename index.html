@@ -392,6 +392,54 @@ function deleteCategory() {
     incomeInput.addEventListener('input', updateTable);
     taxEstimationInput.addEventListener('input', updateTable);
 
+    // Load custom categories from localStorage
+const customCategories = JSON.parse(localStorage.getItem('customCategories') || '[]');
+customCategories.forEach(category => {
+    const safeName = category.id;
+    const categoryName = category.label;
+
+    exactPercentages[safeName] = 0;
+
+    const container = document.createElement("div");
+    container.className = "slider-container";
+    container.id = `${safeName}-container`;
+    
+    container.innerHTML = `
+        <label for="${safeName}">${categoryName}:</label>
+        <input type="range" id="${safeName}" value="0" min="1" max="100">
+        <span id="${safeName}-value">0</span>%
+        <input type="checkbox" id="${safeName}-lock"> Lock
+    `;
+
+    // Insert the new slider container before the category-controls section
+    document.body.insertBefore(container, document.querySelector(".category-controls"));
+    
+    updateSliderValue(safeName, `${safeName}-value`);
+});
+
+
+    // Load data from localStorage
+if (localStorage.getItem('exactPercentages')) {
+    exactPercentages = JSON.parse(localStorage.getItem('exactPercentages'));
+    Object.keys(exactPercentages).forEach(key => {
+        const slider = document.getElementById(key);
+        const output = document.getElementById(`${key}-value`);
+        if (slider && output) {
+            slider.value = Math.round(exactPercentages[key]);
+            output.innerHTML = Math.round(exactPercentages[key]);
+        }
+    });
+}
+
+if (localStorage.getItem('income')) {
+    document.getElementById('income').value = localStorage.getItem('income');
+}
+
+if (localStorage.getItem('taxEstimation')) {
+    document.getElementById('taxEstimation').value = localStorage.getItem('taxEstimation');
+}
+
+
     updateTable();
 });
 
@@ -436,6 +484,22 @@ function updateTable() {
         <td><strong>$${totalPerPaycheck.toFixed(2)}</strong></td>
     `;
     tbody.appendChild(totalsRow);
+
+    // Save data to localStorage
+localStorage.setItem('exactPercentages', JSON.stringify(exactPercentages));
+localStorage.setItem('income', income.toString());
+localStorage.setItem('taxEstimation', (taxEstimation*100).toString());
+
+// Save data to localStorage
+localStorage.setItem('customCategories', JSON.stringify(Array.from(document.querySelectorAll('.slider-container:not([id^="401k-"],[id^="stocks-"],[id^="checking-"],[id^="hy-savings-"])')).map(container => {
+    return {
+        id: container.id.split('-')[0],
+        label: container.querySelector('label').innerText.replace(':', '')
+    };
+})));
+
+
+
 }
 
 
